@@ -15,11 +15,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      builder: (context) => sl<NumberTriviaBloc>(),
+      create: (context) => sl<NumberTriviaBloc>(),
       child: MaterialApp(
         title: 'Number Trivia App',
-        theme: ThemeData(
-            primarySwatch: Colors.pink, accentColor: Colors.pinkAccent),
+        darkTheme: ThemeData.dark().copyWith(
+          primaryColor: Colors.green[800],
+        ),
+        theme: ThemeData.light().copyWith(
+          primaryColor: Colors.green[800],
+        ),
         home: NumberTriviaScreen(),
         debugShowCheckedModeBanner: false,
       ),

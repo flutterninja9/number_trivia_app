@@ -37,7 +37,7 @@ void main() {
 
   test('initial state if bloc should be Empty()', () async {
     //assert
-    expect(bloc.initialState, equals(Empty()));
+    expect(bloc.state, equals(Empty()));
   });
 
   // Group of tests for GetTriviaForConcreteNumber
@@ -57,7 +57,7 @@ void main() {
       //arrange
       setupMockInputConverterSuccess();
       //act
-      bloc.dispatch(GetTriviaForConcreteNumber(tNumberString));
+      bloc.add(GetTriviaForConcreteNumber(numberString: tNumberString));
       // For awaiting for this call coz. its a stream and it takes time to complete
       await untilCalled(inputConverter.stringToUnsignedInt(any));
       //assert
@@ -68,15 +68,15 @@ void main() {
       when(inputConverter.stringToUnsignedInt(any))
           .thenReturn(Left(InvalidInputFailure()));
       // assert
-      // assert is above act coz. we are expectng tehse states to be emmited ater the dispatch of theevent form bloc
+      // assert is above act coz. we are expectng tehse states to be emmited ater the add of theevent form bloc
       expectLater(
           bloc.state,
           emitsInAnyOrder([
             Empty(),
-            Error(INVALID_INPUT_FAILURE_MESSAGE),
+            Error(message: INVALID_INPUT_FAILURE_MESSAGE),
           ]));
       //act
-      bloc.dispatch(GetTriviaForConcreteNumber(tNumberString));
+      bloc.add(GetTriviaForConcreteNumber(numberString: tNumberString));
     });
     test(
         'should return NumberTrivia, when call to getConcreteNumberTrivia is successfull',
@@ -86,7 +86,7 @@ void main() {
       when(getConcreteNumberTrivia(any))
           .thenAnswer((_) async => Right(tNumberTrivia));
       //act
-      bloc.dispatch(GetTriviaForConcreteNumber(tNumberString));
+      bloc.add(GetTriviaForConcreteNumber(numberString: tNumberString));
       await untilCalled(getConcreteNumberTrivia(any));
       //assert
       verify(getConcreteNumberTrivia(Params(number: tNumberParsed)));
@@ -106,7 +106,7 @@ void main() {
             Loaded(trivia: tNumberTrivia),
           ]));
       //act
-      bloc.dispatch(GetTriviaForConcreteNumber(tNumberString));
+      bloc.add(GetTriviaForConcreteNumber(numberString: tNumberString));
     });
     test('should emit [LOADING,ERROR] when getting data is failed', () async {
       //arrange
@@ -119,10 +119,10 @@ void main() {
           emitsInAnyOrder([
             Empty(),
             Loading(),
-            Error(SERVER_FAILURE_MESSAGE),
+            Error(message: SERVER_FAILURE_MESSAGE),
           ]));
       //act
-      bloc.dispatch(GetTriviaForConcreteNumber(tNumberString));
+      bloc.add(GetTriviaForConcreteNumber(numberString: tNumberString));
     });
     test('should emit [LOADING,ERROR] when getting data is failed', () async {
       //arrange
@@ -135,10 +135,10 @@ void main() {
           emitsInAnyOrder([
             Empty(),
             Loading(),
-            Error(CACHE_FAILURE_MESSAGE),
+            Error(message: CACHE_FAILURE_MESSAGE),
           ]));
       //act
-      bloc.dispatch(GetTriviaForConcreteNumber(tNumberString));
+      bloc.add(GetTriviaForConcreteNumber(numberString: tNumberString));
     });
   });
 
@@ -156,7 +156,7 @@ void main() {
       when(getRandomNumberTrivia(NoParams()))
           .thenAnswer((_) async => Right(tNumberTrivia));
       //act
-      bloc.dispatch(GetTriviaForRandomNumber());
+      bloc.add(GetTriviaForRandomNumber());
       await untilCalled(getRandomNumberTrivia(NoParams()));
       //assert
       verify(getRandomNumberTrivia(NoParams()));
@@ -175,7 +175,7 @@ void main() {
             Loaded(trivia: tNumberTrivia),
           ]));
       //act
-      bloc.dispatch(GetTriviaForRandomNumber());
+      bloc.add(GetTriviaForRandomNumber());
     });
     test('should emit [LOADING,ERROR] when getting data is failed', () async {
       //arrange
@@ -187,10 +187,10 @@ void main() {
           emitsInOrder([
             Empty(),
             Loading(),
-            Error(SERVER_FAILURE_MESSAGE),
+            Error(message: SERVER_FAILURE_MESSAGE),
           ]));
       //act
-      bloc.dispatch(GetTriviaForRandomNumber());
+      bloc.add(GetTriviaForRandomNumber());
     });
     test('should emit [LOADING,ERROR] when getting data is failed', () async {
       //arrange
@@ -202,10 +202,10 @@ void main() {
           emitsInOrder([
             Empty(),
             Loading(),
-            Error(CACHE_FAILURE_MESSAGE),
+            Error(message: CACHE_FAILURE_MESSAGE),
           ]));
       //act
-      bloc.dispatch(GetTriviaForRandomNumber());
+      bloc.add(GetTriviaForRandomNumber());
     });
   });
 }

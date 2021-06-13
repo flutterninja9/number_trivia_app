@@ -22,13 +22,13 @@ Widget _buildBody(BuildContext context) {
   return Container(
     padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
     child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(
           height: 10,
         ),
         BlocBuilder<NumberTriviaBloc, NumberTriviaState>(
           builder: (context, state) {
-            print(state);
             if (state is Loading) {
               return LoadingWidget();
             } else if (state is Loaded) {
@@ -65,12 +65,10 @@ Widget _buildBody(BuildContext context) {
             Row(
               children: [
                 Expanded(
-                  child: RaisedButton(
+                  child: ElevatedButton(
                     onPressed: () {
                       dispatchConcrete(context, inpStr);
                     },
-                    color: Theme.of(context).accentColor,
-                    textTheme: ButtonTextTheme.primary,
                     child: Text(
                       "Search",
                     ),
@@ -80,7 +78,7 @@ Widget _buildBody(BuildContext context) {
                   width: 10,
                 ),
                 Expanded(
-                  child: RaisedButton(
+                  child: ElevatedButton(
                     onPressed: () {
                       dispatchRandom(context);
                     },
@@ -99,11 +97,15 @@ Widget _buildBody(BuildContext context) {
 }
 
 void dispatchConcrete(BuildContext context, String inpString) {
-  BlocProvider.of<NumberTriviaBloc>(context)
-      .dispatch(GetTriviaForConcreteNumber(inpString));
+  BlocProvider.of<NumberTriviaBloc>(context).add(
+    GetTriviaForConcreteNumber(
+      numberString: inpString,
+    ),
+  );
 }
 
 void dispatchRandom(BuildContext context) {
-  BlocProvider.of<NumberTriviaBloc>(context)
-      .dispatch(GetTriviaForRandomNumber());
+  BlocProvider.of<NumberTriviaBloc>(context).add(
+    GetTriviaForRandomNumber(),
+  );
 }

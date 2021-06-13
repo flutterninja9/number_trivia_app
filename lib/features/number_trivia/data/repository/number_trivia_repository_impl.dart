@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:clean_architecture_tdd/core/error/exceptions.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
@@ -27,14 +29,14 @@ class NumberTriviaRepositoryImpl implements NumberTriviaRepository {
   @override
   Future<Either<Failure, NumberTrivia>> getConcreteNumberTrivia(
       int number) async {
-    return await _getTrivia(() {
+    return _getTrivia(() {
       return remoteDataSource.getConcreteNumberTrivia(number);
     });
   }
 
   @override
   Future<Either<Failure, NumberTrivia>> getRandomNumberTrivia() async {
-    return await _getTrivia(() {
+    return _getTrivia(() {
       return remoteDataSource.getRadnomNumberTrivia();
     });
   }

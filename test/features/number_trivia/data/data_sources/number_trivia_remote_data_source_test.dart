@@ -47,7 +47,7 @@ void main() {
         remoteDataSourceImpl.getConcreteNumberTrivia(tNumber);
         //assert
         verify(mockHttpClient.get(
-          'http://numbersapi.com/$tNumber',
+          Uri.parse('http://numbersapi.com/$tNumber'),
           headers: {
             'content-type': 'application/json',
           },
@@ -83,8 +83,7 @@ void main() {
     final tNumberTriviaModel =
         NumberTriviaModel.fromJson(jsonDecode(fixture('trivia.json')));
     test(
-      '''should perform a GET request on a URL with number being
-           the endpoint & application/json header''',
+      '''should perform a GET request on a URL with application/json as header''',
       () async {
         //arrannge
         // anonymous function for when(Mock) arrange function
@@ -93,7 +92,7 @@ void main() {
         remoteDataSourceImpl.getRadnomNumberTrivia();
         //assert
         verify(mockHttpClient.get(
-          'http://numbersapi.com/random',
+          Uri.parse('http://numbersapi.com/random'),
           headers: {
             'content-type': 'application/json',
           },
