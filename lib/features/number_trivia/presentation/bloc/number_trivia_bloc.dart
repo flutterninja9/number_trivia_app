@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:clean_architecture_tdd/core/error/failures.dart';
 import 'package:clean_architecture_tdd/core/usecases/use_cases.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 
 import 'package:clean_architecture_tdd/core/utils/input_converter.dart';
@@ -28,9 +30,7 @@ class NumberTriviaBloc extends Bloc<NumberTriviaEvent, NumberTriviaState> {
     @required this.getConcreteNumberTrivia,
     @required this.getRandomNumberTrivia,
     @required this.inputConverter,
-  });
-  @override
-  NumberTriviaState get initialState => Empty();
+  }) : super(Empty());
 
   @override
   Stream<NumberTriviaState> mapEventToState(
@@ -44,22 +44,30 @@ class NumberTriviaBloc extends Bloc<NumberTriviaEvent, NumberTriviaState> {
       // Instead we can simply make use of simple method, that dartz provides us with
       // That method is called fold(Function() failure, Function() success)
       // It will run the failure when Left occures & success when Right occurs
-      yield* inputEither.fold((failure) async* {
-        yield Error(INVALID_INPUT_FAILURE_MESSAGE);
-      }, (integer) async* {
-        yield Loading();
-        final failureOrTrivia =
-            await getConcreteNumberTrivia(Params(number: integer));
-        yield failureOrTrivia.fold(
-          (failure) => Error(_mapFailureToMessage(failure)),
-          (trivia) => Loaded(trivia: trivia),
-        );
-      });
+      yield* inputEither.fold(
+        (failure) async* {
+          yield Error(message: INVALID_INPUT_FAILURE_MESSAGE);
+        },
+        (integer) async* {
+          yield Loading();
+          final failureOrTrivia = await getConcreteNumberTrivia(
+            Params(number: integer),
+          );
+          yield failureOrTrivia.fold(
+            (failure) => Error(
+              message: _mapFailureToMessage(failure),
+            ),
+            (trivia) => Loaded(trivia: trivia),
+          );
+        },
+      );
     } else if (event is GetTriviaForRandomNumber) {
       yield Loading();
       final failureOrTrivia = await getRandomNumberTrivia(NoParams());
       yield failureOrTrivia.fold(
-        (failure) => Error(_mapFailureToMessage(failure)),
+        (failure) => Error(
+          message: _mapFailureToMessage(failure),
+        ),
         (trivia) => Loaded(trivia: trivia),
       );
     }
