@@ -47,7 +47,7 @@ void main() {
         remoteDataSourceImpl.getConcreteNumberTrivia(tNumber);
         //assert
         verify(mockHttpClient.get(
-          Uri.parse('http://numbersapi.com/$tNumber'),
+          Uri.parse('http://numbersapi.com/$tNumber?json'),
           headers: {
             'content-type': 'application/json',
           },
@@ -92,7 +92,7 @@ void main() {
         remoteDataSourceImpl.getRadnomNumberTrivia();
         //assert
         verify(mockHttpClient.get(
-          Uri.parse('http://numbersapi.com/random'),
+          Uri.parse('http://numbersapi.com/random?json'),
           headers: {
             'content-type': 'application/json',
           },
